@@ -7,7 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,20 +16,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import br.com.caelum.dao.JdbcTarefaDao;
+import br.com.caelum.dao.TarefaDao;
 import br.com.caelum.tarefas.models.Tarefas;
 
+@Transactional
 @Controller
 public class TarefasController {
 
-	private final JdbcTarefaDao dao;
+	@Autowired
+	private TarefaDao dao;
 	private Calendar dataFinalizacao;
 	private DateFormat simpleDate;
 
-	@Autowired
-	public TarefasController(JdbcTarefaDao dao) {
+	public TarefasController() {
 
-		this.dao = dao;
 		this.dataFinalizacao = Calendar.getInstance();
 		this.simpleDate = SimpleDateFormat.getDateInstance();
 
@@ -114,10 +114,11 @@ public class TarefasController {
 	}
 
 	@RequestMapping("removeTarefa")
-	public void remove(Long id, HttpServletResponse response) {
+	public String remove(Tarefas tarefa) {
 
-		dao.remove(id);
-		response.setStatus(200);
+		dao.remove(tarefa);
+		return "redirect:listaTarefas";
+		// response.setStatus(200);
 
 	}
 

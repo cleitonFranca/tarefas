@@ -12,12 +12,12 @@ import br.com.caelum.tarefas.models.Tarefas;
 public class BuscaTarefas {
 
 	public static void main(String[] args) {
+		
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("tarefas");
 		EntityManager manager = factory.createEntityManager();
 		
 		// cuidado, use o import javax.persistence.Query
-		Query query = manager.createQuery("select t from Tarefas as t "
-				+ "where t.finalizado = :paramFinalizado");
+		Query query = manager.createQuery("select t from Tarefas as t where t.finalizado = :paramFinalizado");
 		query.setParameter("paramFinalizado", true);
 		
 		@SuppressWarnings("unchecked")
